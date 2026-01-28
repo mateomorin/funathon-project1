@@ -1,6 +1,6 @@
 ---
 lang: fr-FR
-title: Première version de l'interface utilisateur
+title: Training models
 
 format:
   html:

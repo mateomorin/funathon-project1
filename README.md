@@ -110,10 +110,24 @@ dataset a bien été cleané avant. 99 is missing value ?
 comprend les transactions en DOM (St Martin, Guadeloupe, mais pas celles en Alsace Moselle cf. all_transactions_plot)
 
 
-12/
+12/02
 stat des de répartition des valeurs descriptives cf. stat_des_details_flat
 Quasiment que des 0 pour les flat cf. stat_des_details_surf_flat_num et stat_des_details_surf_flat_plot
 "dcntsol",
 "dcntnat",
 "dcntagri"
 with plot of repartition for various var stat_des_details_surf_flat_num
+
+13/02 : 
+- s'inspirer des MOOC de scikit-learn qui sont top : https://inria.github.io/scikit-learn-mooc/
+- have a baseline dummy model to compare to ?
+- need to scale data ? 
+- impact of encoder ? 
+- première regression simple : 
+    - filtrer sur 1 année
+    - features : depcom (question encoding ?), dteloc (boolean apt), dnbppr, dnbcha, dsupdc
+- do stat des with data samples to ease computation time
+    - use seaborn.pairplot to plot correlation graph
+    - use pandas dataframe.hist to plot histogram easily
+
+pairplot with log_price : cf. stat_des_some_vars_pairplot

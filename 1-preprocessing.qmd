@@ -654,7 +654,7 @@ rf_params = {
 
 rf_pipeline = Pipeline([
     ('preprocessing', preprocessor),
-    ('random forests', RandomForestRegressor(**rf_params))
+    ('random_forests', RandomForestRegressor(**rf_params))
 ])
 
 model = TransformedTargetRegressor(

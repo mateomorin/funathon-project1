@@ -353,7 +353,7 @@ oob_error_ntrees = rf_error_oob_plot(X_train=X_train,
                                      min_estimators=5,
                                      max_estimators=150,
                                      metric="r2")
-print(oob_error_ntrees)
+oob_error_ntrees
 ```
 
 ## Tuning all others hyperparameters with cross validation

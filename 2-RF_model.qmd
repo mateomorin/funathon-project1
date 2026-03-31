@@ -173,16 +173,12 @@ X_sub = X_train.filter(items=y_sub.index, axis=0 )  # sampling X_train
 
 2.  Train multiple RF models with varying numbers of trees, using `warm_start=True` to avoid retraining all trees from scratch at each iteration. Keep the OOB error calculated in a list.
 
-    <details>
+    ::: {.callout-tip collapse="true" title="Click to view a hint"}
+    As a hint, you can go to the documentation page on OOB error [here](https://scikit-learn.org/stable/auto_examples/ensemble/plot_ensemble_oob.html).
 
-    <summary>Click to view a hint</summary>
+    If you need, here is the code to calculate and store the OOB score.
 
-    ````         
-    As a hint, you can go to the documentation page on OOB error [here](https://scikit-learn.org/stable/auto_examples/ensemble/plot_ensemble_oob.html). 
-
-    If you need, here is the code to calculate and store the OOB score. 
-
-    ```python
+    ```{python}
     oob_scores = []
     warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
     # filterwarnings remove some warnings messages
@@ -199,9 +195,7 @@ X_sub = X_train.filter(items=y_sub.index, axis=0 )  # sampling X_train
             oob_scores.append((n, mae))
     warnings.resetwarnings()
     ```
-    ````
-
-    </details>
+    :::
 
 ```{python}
 #| code-fold: true

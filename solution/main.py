@@ -76,7 +76,7 @@ df['jannath_10'] = df['jannath_10'].where(df['jannath_10'] >= 1850, 1840)
 # Dropping old column
 df = df.drop(columns=["jannath"])
 
-
+# %%
 def date_to_days(X: pd.Series, ref_date:pd.Timestamp):
     # converts a date to a difference to ref_date : 
     diff_dt = pd.to_datetime(X) - ref_date
@@ -160,7 +160,7 @@ model = Pipeline(
         )),
     ]
 )
-
+# %%
 # Fit model
 model.fit(X_train, y_train)
 

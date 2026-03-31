@@ -162,7 +162,7 @@ We will implement a function to plot the OOB error as a function of the number o
 
 # Sample the train dataset using Pandas' index
 X_sub = X_train.sample(frac=0.1, axis=0, random_state= RANDOM_STATE) 
-y_sub = y_train[X_sub.index]  # target must be a dataframe with 1 column
+y_sub = y_train[X_sub.index] 
 
 ```
 
@@ -183,15 +183,15 @@ y_sub = y_train[X_sub.index]  # target must be a dataframe with 1 column
         warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
         # filterwarnings remove some warnings messages
         for n in range(min_estimators, max_estimators, 10):
-            rf_pipeline["random_forests"].set_params(n_estimators=n)
-            rf_pipeline.fit(X_sub, y_sub)
+            rf.set_params(n_estimators=n)
+            rf.fit(X_sub, y_sub)
             if metric == "r2":
-                oob_scores.append((n, 1 - rf_pipeline["random_forests"].oob_score_))
+                oob_scores.append((n, 1 - rf.oob_score_))
             elif metric == "neg_root_mean_squared_error":
-                mse = np.mean((y_sub - rf_pipeline["random_forests"].oob_prediction_) ** 2)
+                mse = np.mean((y_sub - rf.oob_prediction_) ** 2)
                 oob_scores.append((n, np.sqrt(mse)))
             else:
-                mae = np.mean(np.abs(y_sub - rf_pipeline["random_forests"].oob_prediction_))
+                mae = np.mean(np.abs(y_sub - rf.oob_prediction_))
                 oob_scores.append((n, mae))
         warnings.resetwarnings()
         ```
@@ -217,24 +217,19 @@ rf = RandomForestRegressor(
     **rf_params,
 )
 
-rf_pipeline = Pipeline([
-    ('preprocessing', preprocessor),
-    ('random_forests', rf)
-])
-
 oob_scores = []
 warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
 # filterwarnings remove some warnings messages
 for n in range(min_estimators, max_estimators, 20):
-    rf_pipeline["random_forests"].set_params(n_estimators=n)
-    rf_pipeline.fit(X_sub, y_sub)
+    rf.set_params(n_estimators=n)
+    rf.fit(X_sub, y_sub)
     if metric == "r2":
-        oob_scores.append((n, 1 - rf_pipeline["random_forests"].oob_score_))
+        oob_scores.append((n, 1 - rf.oob_score_))
     elif metric == "neg_root_mean_squared_error":
-        mse = np.mean((y_sub - rf_pipeline["random_forests"].oob_prediction_) ** 2)
+        mse = np.mean((y_sub - rf.oob_prediction_) ** 2)
         oob_scores.append((n, np.sqrt(mse)))
     else:
-        mae = np.mean(np.abs(y_sub - rf_pipeline["random_forests"].oob_prediction_))
+        mae = np.mean(np.abs(y_sub - rf.oob_prediction_))
         oob_scores.append((n, mae))
 warnings.resetwarnings()
 ```
@@ -289,38 +284,30 @@ def rf_error_oob_plot(X_train,
         metric : 'r2',  'rmse' or 'mae'
     """
 
-# --- Sous-échantillonnage stratifié sur la cible ---
+# --- Sampling training set ---
 
-    df_sub = df.sample(frac=subsample, axis=0, random_state= RANDOM_STATE)
+    X_sub = X_train.sample(frac=0.1, axis=0, random_state= RANDOM_STATE) 
+    y_sub = y_train[X_sub.index] 
 
-    # Split features / target
-    X_sub = df_sub.drop(columns="valfonc_m2")  # X must contain only the features we'll learn from
-    y_sub = df_sub["valfonc_m2"]  # target must be a dataframe with 1 column
-
-    # --- Entraînement incrémental avec warm_start ---
+    # --- 
     rf = RandomForestRegressor(
         oob_score=True,
         warm_start=True,
         **rf_params,
     )
 
-    rf_pipeline = Pipeline([
-        ('preprocessing', preprocessor),
-        ('random_forests', rf)
-    ])
-
     oob_scores = []
     warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
     for n in range(min_estimators, max_estimators, 10):
-        rf_pipeline["random_forests"].set_params(n_estimators=n)
-        rf_pipeline.fit(X_sub, y_sub)
+        rf.set_params(n_estimators=n)
+        rf.fit(X_sub, y_sub)
         if metric == "r2":
-            oob_scores.append((n, 1 - rf_pipeline["random_forests"].oob_score_))
+            oob_scores.append((n, 1 - rf.oob_score_))
         elif metric == "neg_root_mean_squared_error":
-            mse = np.mean((y_sub - rf_pipeline["random_forests"].oob_prediction_) ** 2)
+            mse = np.mean((y_sub - rf.oob_prediction_) ** 2)
             oob_scores.append((n, np.sqrt(mse)))
         else:
-            mae = np.mean(np.abs(y_sub - rf_pipeline["random_forests"].oob_prediction_))
+            mae = np.mean(np.abs(y_sub - rf.oob_prediction_))
             oob_scores.append((n, mae))
     warnings.resetwarnings()
 
@@ -358,7 +345,7 @@ print(oob_error_ntrees)
 
 **Cross-validation** is a key step in model training : it is a technique used to evaluate the model's ability to generalize to unseendata, by splitting the dataset into multiple folds (typically 5) and iteratively using each fold as a validation set while the remaining folds are used for training. It also allows you to compare different set of hyperparameters and select the configuration that yields the best predictive performance.
 
-> Note : In the Preprocessing section, you saw how to build a Pipeline. In this exercise, we will use Pipeline again. The first exercise didn't use it to let you practice scikit-learn tools.
+> Note : In the Preprocessing section, you saw how to build a Pipeline. In this exercise, we will use Pipeline again. The first exercise didn't use it to let you practice scikit-learn tools documented [here](https://scikit-learn.org/stable/modules/compose.html#pipelines-and-composite-estimators).
 
 1.  Create a dictionary with all hyperparameters to test for training
 
